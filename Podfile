@@ -6,9 +6,13 @@ target 'nbTest' do
   use_frameworks!
 
   # Pods for nbTest
-  pod 'Firebase/Core', '~> 7.1.0'
-  pod 'Firebase/Database', '~> 7.1.0'
-  pod 'Firebase/Auth', '~> 7.1.0'
-  pod 'Firebase/Firestore', '~> 7.1.0'
+  pod 'SnapKit'
+  pod 'Firebase/Core'
+  pod 'Firebase/Database'
+  pod 'Firebase/Auth'
+  pod 'Firebase/Firestore'
+  
+  pod 'RxSwift'
+  pod 'RxCocoa'
 
 end
