@@ -10,6 +10,7 @@ import RxSwift
 import RxCocoa
 import Firebase
 import FirebaseDatabase
+import FirebaseFirestore
 
 class ViewController: UIViewController {
     private let disposeBag = DisposeBag()
