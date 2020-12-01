@@ -16,6 +16,7 @@
 		5075FD6A257396F60034C642 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5075FD69257396F60034C642 /* Assets.xcassets */; };
 		5075FD6D257396F60034C642 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5075FD6B257396F60034C642 /* LaunchScreen.storyboard */; };
 		5075FD8D25739D9D0034C642 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5075FD8C25739D9D0034C642 /* GoogleService-Info.plist */; };
+		507DC0CD2575E0EA000574CE /* FireAd.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507DC0CC2575E0E9000574CE /* FireAd.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		5075FD6C257396F60034C642 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5075FD6E257396F60034C642 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5075FD8C25739D9D0034C642 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		507DC0CC2575E0E9000574CE /* FireAd.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FireAd.swift; sourceTree = "<group>"; };
 		850CA6EC14592C6209F0E5B0 /* Pods-nbTest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-nbTest.release.xcconfig"; path = "Target Support Files/Pods-nbTest/Pods-nbTest.release.xcconfig"; sourceTree = "<group>"; };
 		FB163DF3B20BDAF7CF8DD95A /* Pods_nbTest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_nbTest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -69,6 +71,7 @@
 			children = (
 				5075FD60257396F30034C642 /* AppDelegate.swift */,
 				5075FD62257396F30034C642 /* SceneDelegate.swift */,
+				507DC0CC2575E0E9000574CE /* FireAd.swift */,
 				501A16E32574D73F0096669A /* LoginView.swift */,
 				501A16E22574D73F0096669A /* LoginController.swift */,
 				5075FD64257396F30034C642 /* ViewController.swift */,
@@ -215,6 +218,7 @@
 				501A16E42574D73F0096669A /* LoginController.swift in Sources */,
 				5075FD61257396F30034C642 /* AppDelegate.swift in Sources */,
 				501A16E52574D73F0096669A /* LoginView.swift in Sources */,
+				507DC0CD2575E0EA000574CE /* FireAd.swift in Sources */,
 				5075FD63257396F30034C642 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

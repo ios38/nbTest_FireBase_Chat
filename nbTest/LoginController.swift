@@ -24,7 +24,6 @@ class LoginController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.title = "Вход"
-
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -62,12 +61,6 @@ class LoginController: UIViewController {
                 //print(">>>>> login button tapped")
                 guard let email = loginView.loginTextField.text, let password = loginView.passwordTextField.text else { return }
                 Auth.auth().signIn(withEmail: email, password: password) { (result, error) in
-                    /*
-                    if let error = error {
-                        print(error.localizedDescription)
-                    } else {
-                        navigationController?.pushViewController(ViewController(), animated: true)
-                    }*/
                 }
             }.disposed(by: disposeBag)
     }
