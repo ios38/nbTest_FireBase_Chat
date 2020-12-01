@@ -15,7 +15,7 @@ struct FirebaseAd {
     
     let ref: DatabaseReference?
     
-    let dateFormatter = DateFormatter()
+    private let dateFormatter = DateFormatter()
 
     init(title: String, date: Date) {
         self.title = title
@@ -52,7 +52,7 @@ struct FirestoreAd {
     
     //let ref: DatabaseReference?
     
-    let dateFormatter = DateFormatter()
+    private let dateFormatter = DateFormatter()
 
     init(title: String, date: Date) {
         self.title = title
@@ -80,9 +80,5 @@ struct FirestoreAd {
             "title": title,
             "date": dateFormatter.string(from: Date())
         ]
-    }
-    
-    func saveToFirestore(_ ads: [FirestoreAd]) {
-        
     }
 }

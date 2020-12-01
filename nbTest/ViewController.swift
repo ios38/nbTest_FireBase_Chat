@@ -14,14 +14,17 @@ import FirebaseFirestore
 
 class ViewController: UIViewController {
     private let disposeBag = DisposeBag()
-    var ads = [FireAd]()
+    var ads = [FirebaseAd]()
+    var firestoreAds = [FirestoreAd]()
     var adsRef = Database.database().reference(withPath: "ads")
-    
+    private let dateFormatter = DateFormatter()
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z" //"2020-11-24 10:19:17 +0000"
+
         setuplogoutButton()
-        setupRemoveButton()
+        //setupRemoveButton()
         
         createFireAd(title: "Продам квартиру")
         
@@ -30,9 +33,11 @@ class ViewController: UIViewController {
             self.ads.removeAll()
             for adSnapshot in allAdsSnapshot.children {
                 guard let snapshot = adSnapshot as? DataSnapshot,
-                      let ad = FireAd(snapshot: snapshot) else { return }
+                      let ad = FirebaseAd(snapshot: snapshot) else { return }
                 print(">>> \(ad.title) \(ad.date)")
                 self.ads.append(ad)
+                let firestoreAd = FirestoreAd(title: ad.title, date: ad.date)
+                self.saveToFirestore(firestoreAd)
             }
         }
     }
@@ -43,10 +48,18 @@ class ViewController: UIViewController {
     }
 
     private func createFireAd(title: String) {
-        let ad = FireAd(title: title, date: Date())
+        let ad = FirebaseAd(title: title, date: Date())
         
         let adRef = adsRef.child(title.lowercased())
         adRef.setValue(ad.toAnyObject())
+    }
+
+    
+    func saveToFirestore(_ ad: FirestoreAd) {
+        Firestore.firestore()
+            .collection("ads")
+            .document(dateFormatter.string(from: ad.date))
+            .setData(ad.toAnyObject())
     }
 
     private func setuplogoutButton() {
