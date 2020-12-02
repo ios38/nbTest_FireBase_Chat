@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		017335903D8FDAEAE1BE85FE /* Pods_nbTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB163DF3B20BDAF7CF8DD95A /* Pods_nbTest.framework */; };
+		501110132577AC95002781D6 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501110122577AC95002781D6 /* User.swift */; };
 		501A16E42574D73F0096669A /* GbLoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501A16E22574D73F0096669A /* GbLoginController.swift */; };
 		501A16E52574D73F0096669A /* GbLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501A16E32574D73F0096669A /* GbLoginView.swift */; };
 		5075FD61257396F30034C642 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5075FD60257396F30034C642 /* AppDelegate.swift */; };
@@ -25,6 +26,7 @@
 
 /* Begin PBXFileReference section */
 		085BF649AA8A5D7A3FD609BA /* Pods-nbTest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-nbTest.debug.xcconfig"; path = "Target Support Files/Pods-nbTest/Pods-nbTest.debug.xcconfig"; sourceTree = "<group>"; };
+		501110122577AC95002781D6 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		501A16E22574D73F0096669A /* GbLoginController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GbLoginController.swift; sourceTree = "<group>"; };
 		501A16E32574D73F0096669A /* GbLoginView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GbLoginView.swift; sourceTree = "<group>"; };
 		5075FD5D257396F30034C642 /* nbTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = nbTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -56,6 +58,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		501110112577AC84002781D6 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				501110122577AC95002781D6 /* User.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		5075FD54257396F30034C642 = {
 			isa = PBXGroup;
 			children = (
@@ -77,6 +87,7 @@
 		5075FD5F257396F30034C642 /* nbTest */ = {
 			isa = PBXGroup;
 			children = (
+				501110112577AC84002781D6 /* Models */,
 				5075FD60257396F30034C642 /* AppDelegate.swift */,
 				5075FD62257396F30034C642 /* SceneDelegate.swift */,
 				50FA815825777350006F58BC /* Gb */,
@@ -268,6 +279,7 @@
 				507DC0CD2575E0EA000574CE /* FirebaseAd.swift in Sources */,
 				5075FD63257396F30034C642 /* SceneDelegate.swift in Sources */,
 				50FA816725777439006F58BC /* LoginController.swift in Sources */,
+				501110132577AC95002781D6 /* User.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
