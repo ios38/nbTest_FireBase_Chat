@@ -10,9 +10,7 @@ import SnapKit
 
 class LoginView: UIView {
     private var view = UIView()
-    private var logoImageView = UIImageView()
-    private var logoTitleLabel = UILabel()
-    private var logoSubtitleLabel = UILabel()
+    lazy var userImageView = UIImageView()
 
     var loginTextField = UITextField()
     var passwordTextField = UITextField()
@@ -22,10 +20,9 @@ class LoginView: UIView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
         setupView()
-        setupLogoImageView()
-        setupLogoTitleLabel()
-        setupLogoSubtitleLabel()
+        setupUserImageView()
         setupLoginTextField()
         setupPasswordTextField()
         setupLoginButton()
@@ -37,62 +34,42 @@ class LoginView: UIView {
     }
 
     private func setupView() {
-        //view.backgroundColor = .systemGray5
+        //self.backgroundColor = .black
+        //view.backgroundColor = .blue
         self.addSubview(view)
 
         view.snp.makeConstraints { make in
             make.center.equalToSuperview()
             make.width.equalTo(300)
-            make.height.equalTo(400)
+            make.height.equalTo(350)
         }
     }
 
-    private func setupLogoImageView() {
-        logoImageView.clipsToBounds = true
-        logoImageView.image = UIImage(systemName: "house.fill")
-        logoImageView.contentMode = .scaleAspectFit
-        logoImageView.tintColor = .secondaryLabel
-        view.addSubview(logoImageView)
+    private func setupUserImageView() {
+        userImageView.clipsToBounds = true
+        userImageView.layer.cornerRadius = 30
+        userImageView.image = UIImage(systemName: "house.fill")
+        userImageView.contentMode = .scaleAspectFit
+        userImageView.tintColor = .secondaryLabel
+        userImageView.isUserInteractionEnabled = true
 
-        logoImageView.snp.makeConstraints { make in
+        view.addSubview(userImageView)
+
+        userImageView.snp.makeConstraints { make in
             make.width.height.equalTo(60)
             make.top.equalToSuperview()
             make.centerX.equalToSuperview()
         }
     }
 
-    private func setupLogoTitleLabel() {
-        logoTitleLabel.text = "Соседи"
-        logoTitleLabel.font = .systemFont(ofSize: 24)
-        logoTitleLabel.textColor = .label
-        view.addSubview(logoTitleLabel)
-
-        logoTitleLabel.snp.makeConstraints { make in
-            make.top.equalTo(logoImageView.snp.bottom).offset(5)
-            make.centerX.equalToSuperview()
-        }
-    }
-
-    private func setupLogoSubtitleLabel() {
-        logoSubtitleLabel.text = "Общение • Голосования • Объявления"
-        logoSubtitleLabel.font = .systemFont(ofSize: 14)
-        logoSubtitleLabel.textColor = .secondaryLabel
-        view.addSubview(logoSubtitleLabel)
-
-        logoSubtitleLabel.snp.makeConstraints { make in
-            make.top.equalTo(logoTitleLabel.snp.bottom).offset(5)
-            make.centerX.equalToSuperview()
-        }
-    }
-
     private func setupLoginTextField() {
         loginTextField.borderStyle = .roundedRect
-        loginTextField.placeholder = "Имя пользователя или телефон"
+        loginTextField.placeholder = "email"
         loginTextField.accessibilityIdentifier = "loginTextField"
         view.addSubview(loginTextField)
 
         loginTextField.snp.makeConstraints { make in
-            make.top.equalTo(logoSubtitleLabel.snp.bottom).offset(30)
+            make.top.equalTo(userImageView.snp.bottom).offset(20)
             make.leading.equalToSuperview().offset(10)
             make.trailing.equalToSuperview().inset(10)
         }
@@ -101,7 +78,7 @@ class LoginView: UIView {
     private func setupPasswordTextField() {
         passwordTextField.isSecureTextEntry = true
         passwordTextField.borderStyle = .roundedRect
-        passwordTextField.placeholder = "Пароль"
+        passwordTextField.placeholder = "password"
         passwordTextField.accessibilityIdentifier = "passwordTextField"
         view.addSubview(passwordTextField)
 

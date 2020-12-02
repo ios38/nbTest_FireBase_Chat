@@ -12,7 +12,7 @@ import FirebaseAuth
 import FirebaseDatabase
 
 class LoginController: UIViewController {
-    private var loginView = GbLoginView()
+    private var loginView = LoginView()
     private let disposeBag = DisposeBag()
     private var authListener: AuthStateDidChangeListenerHandle?
 
@@ -25,11 +25,12 @@ class LoginController: UIViewController {
         super.viewDidLoad()
         //self.navigationItem.title = "Вход"
         setUpBindings()
+        setupUserImagePicker()
     }
 
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
-    }
+    //override var preferredStatusBarStyle: UIStatusBarStyle {
+    //    return .lightContent
+    //}
 
     /*
     override func viewWillAppear(_ animated: Bool) {
@@ -88,4 +89,43 @@ class LoginController: UIViewController {
             }.disposed(by: disposeBag)
     }
 
+    func setupUserImagePicker() {
+        loginView.userImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleSelectUserImage)))
+    }
+
+    @objc func handleSelectUserImage() {
+        guard UIImagePickerController.isSourceTypeAvailable(.photoLibrary) else { return }
+        let picker = UIImagePickerController()
+        picker.delegate = self
+        picker.sourceType = .photoLibrary
+        picker.allowsEditing = true
+        
+        present(picker, animated: true)
+    }
+
+
+}
+
+extension LoginController: UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let image  = extractImage(info: info) {
+            loginView.userImageView.image = image
+        }
+        
+        picker.dismiss(animated: true)
+    }
+    
+    private func extractImage(info: [UIImagePickerController.InfoKey : Any]) -> UIImage? {
+        if let image = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
+            return image
+        } else if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            return image
+        } else {
+            return nil
+        }
+    }
 }
