@@ -12,10 +12,9 @@ import Firebase
 import FirebaseDatabase
 import FirebaseFirestore
 
-class ViewController: UIViewController {
+class GbViewController: UIViewController {
     private let disposeBag = DisposeBag()
     var ads = [FirebaseAd]()
-    var firestoreAds = [FirestoreAd]()
     var adsRef = Database.database().reference(withPath: "ads")
     private let dateFormatter = DateFormatter()
 
