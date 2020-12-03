@@ -52,4 +52,23 @@ class MessagesController: UITableViewController {
         present(login, animated: true, completion: nil)
     }
 
+    @objc func showChatController() {
+        let chatController = ChatController(collectionViewLayout: UICollectionViewLayout())
+        navigationController?.pushViewController(chatController, animated: true)
+    }
+
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = UITableViewCell()
+        cell.textLabel?.text = "Chat Controller"
+        return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        showChatController()
+    }
+
 }
