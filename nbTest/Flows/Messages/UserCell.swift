@@ -32,7 +32,8 @@ class UserCell: UITableViewCell {
         userImageView.snp.makeConstraints { make in
             make.width.height.equalTo(40)
             make.leading.equalToSuperview().inset(10)
-            make.top.bottom.equalToSuperview().inset(5)
+            make.top.equalToSuperview().inset(5)
+            make.bottom.equalToSuperview().inset(5).priority(999)
         }
 
         //nameLabel.font = UIFont.systemFont(ofSize: 14)
