@@ -57,9 +57,9 @@ class UserCell: UITableViewCell {
     }
 
 }
-
+/*
 class ChatUserCell: UITableViewCell {
-    /*
+    
     var message: Message? {
         didSet {
             setupNameAndProfileImage()
@@ -74,8 +74,8 @@ class ChatUserCell: UITableViewCell {
                 timeLabel.text = dateFormatter.string(from: timestampDate)
             }
         }
-    }*/
-    /*
+    }
+    
     private func setupNameAndProfileImage() {
         if let id = message?.chatPartnerId() {
             let ref = Database.database().reference().child("users").child(id)
@@ -91,7 +91,7 @@ class ChatUserCell: UITableViewCell {
                 
             }, withCancel: nil)
         }
-    }*/
+    }
     
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -140,4 +140,4 @@ class ChatUserCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-}
+}*/
