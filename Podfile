@@ -15,5 +15,7 @@ target 'nbTest' do
   
   pod 'RxSwift'
   pod 'RxCocoa'
+  
+  pod 'Kingfisher'
 
 end

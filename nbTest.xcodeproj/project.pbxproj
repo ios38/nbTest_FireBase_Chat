@@ -11,6 +11,7 @@
 		501110132577AC95002781D6 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501110122577AC95002781D6 /* User.swift */; };
 		501A16E42574D73F0096669A /* GbLoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501A16E22574D73F0096669A /* GbLoginController.swift */; };
 		501A16E52574D73F0096669A /* GbLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501A16E32574D73F0096669A /* GbLoginView.swift */; };
+		505BFE2F2578A86B00D50FDB /* UserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505BFE2E2578A86B00D50FDB /* UserCell.swift */; };
 		5075FD61257396F30034C642 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5075FD60257396F30034C642 /* AppDelegate.swift */; };
 		5075FD63257396F30034C642 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5075FD62257396F30034C642 /* SceneDelegate.swift */; };
 		5075FD65257396F30034C642 /* GbViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5075FD64257396F30034C642 /* GbViewController.swift */; };
@@ -29,6 +30,7 @@
 		501110122577AC95002781D6 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		501A16E22574D73F0096669A /* GbLoginController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GbLoginController.swift; sourceTree = "<group>"; };
 		501A16E32574D73F0096669A /* GbLoginView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GbLoginView.swift; sourceTree = "<group>"; };
+		505BFE2E2578A86B00D50FDB /* UserCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserCell.swift; sourceTree = "<group>"; };
 		5075FD5D257396F30034C642 /* nbTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = nbTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5075FD60257396F30034C642 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5075FD62257396F30034C642 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -123,6 +125,7 @@
 		50FA815E25777439006F58BC /* Messages */ = {
 			isa = PBXGroup;
 			children = (
+				505BFE2E2578A86B00D50FDB /* UserCell.swift */,
 				50FA815F25777439006F58BC /* MessagesController.swift */,
 				50FA816025777439006F58BC /* NewMessageController.swift */,
 			);
@@ -277,6 +280,7 @@
 				50FA816425777439006F58BC /* MessagesController.swift in Sources */,
 				501A16E52574D73F0096669A /* GbLoginView.swift in Sources */,
 				507DC0CD2575E0EA000574CE /* FirebaseAd.swift in Sources */,
+				505BFE2F2578A86B00D50FDB /* UserCell.swift in Sources */,
 				5075FD63257396F30034C642 /* SceneDelegate.swift in Sources */,
 				50FA816725777439006F58BC /* LoginController.swift in Sources */,
 				501110132577AC95002781D6 /* User.swift in Sources */,

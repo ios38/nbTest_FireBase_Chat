@@ -7,6 +7,7 @@
 
 import UIKit
 import FirebaseDatabase
+import Kingfisher
 
 class NewMessageController: UITableViewController {
     var users = [User]()
@@ -43,19 +44,25 @@ class NewMessageController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        cell.textLabel?.text = users[indexPath.row].email
+        let user = users[indexPath.row]
+
+        cell.textLabel?.text = user.email
+
+        if let profileImageUrl = user.profileImageUrl, let url = URL(string: profileImageUrl) {
+            cell.imageView?.kf.setImage(with: url)
+        }
         return cell
     }
 }
 
 class UserCell: UITableViewCell {
-    
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError()
     }
-    
+
 }
