@@ -19,10 +19,10 @@ class NewMessageController: UITableViewController {
 
         tableView.register(UserCell.self, forCellReuseIdentifier: "Cell")
 
-        fetchUser()
+        fetchUsers()
     }
 
-    func fetchUser() {
+    func fetchUsers() {
         Database.database().reference().child("users").observe(.childAdded) { (snapshot) in
             //print(snapshot)
             if let dictionary = snapshot.value as? [String: AnyObject] {
@@ -43,26 +43,9 @@ class NewMessageController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! UserCell
         let user = users[indexPath.row]
-
-        cell.textLabel?.text = user.email
-
-        if let profileImageUrl = user.profileImageUrl, let url = URL(string: profileImageUrl) {
-            cell.imageView?.kf.setImage(with: url)
-        }
+        cell.configure(with: user)
         return cell
     }
-}
-
-class UserCell: UITableViewCell {
-
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError()
-    }
-
 }

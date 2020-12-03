@@ -7,6 +7,7 @@ target 'nbTest' do
 
   # Pods for nbTest
   pod 'SnapKit'
+  
   pod 'Firebase/Core'
   pod 'Firebase/Database'
   pod 'Firebase/Auth'

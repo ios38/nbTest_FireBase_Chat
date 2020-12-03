@@ -1,13 +1,62 @@
 //
 //  UserCell.swift
-//  Chat
+//  nbTest
 //
-//  Created by Andrew Moisol on 2/11/18.
-//  Copyright © 2018 Andrii Moisol. All rights reserved.
+//  Created by Maksim Romanov on 03.12.2020.
 //
 
 import UIKit
 import Firebase
+import SnapKit
+
+class UserCell: UITableViewCell {
+    var userImageView = UIImageView()
+    var nameLabel = UILabel()
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        setupViews()
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    private func setupViews() {
+        userImageView.clipsToBounds = true
+        userImageView.layer.cornerRadius = 20
+        userImageView.contentMode = .scaleAspectFit
+        contentView.addSubview(userImageView)
+
+        userImageView.snp.makeConstraints { make in
+            make.width.height.equalTo(40)
+            make.leading.equalToSuperview().inset(10)
+            make.top.bottom.equalToSuperview().inset(5)
+        }
+
+        //nameLabel.font = UIFont.systemFont(ofSize: 14)
+        //nameLabel.textColor = .secondaryLabel
+        //nameLabel.setContentHuggingPriority(UILayoutPriority(rawValue: 252), for: .vertical)
+        contentView.addSubview(nameLabel)
+
+        nameLabel.snp.makeConstraints { (make) in
+            make.centerY.equalTo(userImageView.snp.centerY)
+            make.leading.equalTo(userImageView.snp.trailing).offset(10)
+            make.trailing.equalToSuperview().inset(10)
+        }
+
+    }
+    
+    func configure(with user: User) {
+        self.nameLabel.text = user.email
+
+        if let profileImageUrl = user.profileImageUrl, let url = URL(string: profileImageUrl) {
+            self.userImageView.kf.setImage(with: url)
+        }
+    }
+
+}
 
 class ChatUserCell: UITableViewCell {
     /*
