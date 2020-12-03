@@ -8,6 +8,7 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import Firebase
 import FirebaseAuth
 import FirebaseDatabase
 
@@ -60,17 +61,30 @@ class LoginController: UIViewController {
                         print(error)
                     } else {
                         //Auth.auth().signIn(withEmail: email, password: password)
-                        
                         guard let uid = result?.user.uid else { return }
-                        let ref = Database.database().reference()
-                        let userReference = ref.child("users").child(uid)
-                        let values = ["email": email]
-                        userReference.updateChildValues(values, withCompletionBlock: { (error, ref) in
-                            if let error = error {
-                                print(error)
+                        
+                        let imageName = UUID().uuidString
+                        let storageRef = Storage.storage().reference().child("profile_images").child("\(imageName).jpg")
+                        
+                        //let storageRef = Storage.storage().reference().child("profile_images").child("\(imageName).jpg")
+                        
+                        if let profileImage = loginView.userImageView.image,
+                           let uploadData = profileImage.jpegData(compressionQuality: 0.1) {
+                            storageRef.putData(uploadData, metadata: nil) { (metadata, error) in
+                                if let error = error {
+                                    print(error)
+                                }
+                                storageRef.downloadURL { (url, error) in
+                                    if let error = error {
+                                        print(error)
+                                    }
+                                    guard let userImageUrl = url?.absoluteString else { return }
+                                    print (">>>>> \(userImageUrl)")
+                                    let values = ["email": email, "profileImageUrl": userImageUrl]
+                                    self.registerUserIntoDatabaseWithUID(uid, values: values as [String : AnyObject])
+                                }
                             }
-                        })
-                        self.dismiss(animated: true, completion: nil)
+                        }
                     }
                 }
             }.disposed(by: disposeBag)
@@ -87,6 +101,21 @@ class LoginController: UIViewController {
                     }
                 }
             }.disposed(by: disposeBag)
+    }
+
+    func registerUserIntoDatabaseWithUID(_ uid: String, values: [String: AnyObject]) {
+        let ref = Database.database().reference()
+        let userReference = ref.child("users").child(uid)
+        //let values = ["email": email]
+        userReference.updateChildValues(values, withCompletionBlock: { (error, ref) in
+            if let error = error {
+                print(error)
+            }
+        })
+        //let user = User(dictionary: values)
+        //self.messagesController?.setupNavBarWithUser(user)
+        self.dismiss(animated: true, completion: nil)
+
     }
 
     func setupUserImagePicker() {

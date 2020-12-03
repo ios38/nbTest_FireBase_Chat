@@ -11,6 +11,7 @@ target 'nbTest' do
   pod 'Firebase/Database'
   pod 'Firebase/Auth'
   pod 'Firebase/Firestore'
+  pod 'Firebase/Storage'
   
   pod 'RxSwift'
   pod 'RxCocoa'

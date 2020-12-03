@@ -25,7 +25,8 @@ class NewMessageController: UITableViewController {
         Database.database().reference().child("users").observe(.childAdded) { (snapshot) in
             //print(snapshot)
             if let dictionary = snapshot.value as? [String: AnyObject] {
-                let user = User(email: (dictionary["email"] as? String)) //FIXME: add User init from DataSnapshot
+                //let user = User(email: (dictionary["email"] as? String)) //FIXME: add User init from DataSnapshot
+                let user = User(dictionary: dictionary) //FIXME: add User init from DataSnapshot
                 self.users.append(user)
                 self.tableView.reloadData()
             }
