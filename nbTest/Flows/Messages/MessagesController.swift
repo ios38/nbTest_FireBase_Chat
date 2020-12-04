@@ -11,24 +11,34 @@ import FirebaseDatabase
 
 class MessagesController: UITableViewController {
     var messages = [Message]()
+    var messagesDict = [String: Message]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(MessagesController.handleLogout))
         
         let image = UIImage(systemName: "square.and.pencil")
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: image, style: .plain, target: self, action: #selector(MessagesController.handleNewMessage))
 
+        tableView.register(UserCell.self, forCellReuseIdentifier: "Cell")
         checkIfUserIsLoggedIn()
         observeMessages()
     }
 
     func observeMessages() {
         let ref = Database.database().reference().child("messages")
-        ref.observe(.childAdded) { (snapshot) in
+        ref.observe(.childAdded) { [unowned self] (snapshot) in
             if let dictionary = snapshot.value as? [String: AnyObject] {
                 let message = Message(dictionary: dictionary)
                 self.messages.append(message)
+                
+                if let toId = message.toId {
+                    self.messagesDict[toId] = message
+                }
+                
+                self.messages = Array(self.messagesDict.values)
+                self.messages.sort { $0.date! > $1.date! }
             }
             DispatchQueue.main.async {
                 self.tableView.reloadData()
@@ -79,10 +89,9 @@ class MessagesController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "Cell")
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell") as! UserCell
         let message = messages[indexPath.row]
-        cell.textLabel?.text = message.toId
-        cell.detailTextLabel?.text = message.text
+        cell.configure(message: message)
         return cell
     }
 

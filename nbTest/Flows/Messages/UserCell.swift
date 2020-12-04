@@ -12,10 +12,13 @@ import SnapKit
 class UserCell: UITableViewCell {
     var userImageView = UIImageView()
     var nameLabel = UILabel()
-    
+    var dateLabel = UILabel()
+    private let dateFormatter = DateFormatter()
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
+        dateFormatter.dateFormat = "d MMM, HH:mm" //"20-11-24 10:19"
+
         setupViews()
     }
 
@@ -44,16 +47,45 @@ class UserCell: UITableViewCell {
         nameLabel.snp.makeConstraints { (make) in
             make.centerY.equalTo(userImageView.snp.centerY)
             make.leading.equalTo(userImageView.snp.trailing).offset(10)
+            //make.trailing.equalToSuperview().inset(10)
+        }
+
+        dateLabel.font = UIFont.systemFont(ofSize: 13)
+        dateLabel.textColor = .secondaryLabel
+        //dateLabel.setContentHuggingPriority(UILayoutPriority(rawValue: 252), for: .vertical)
+        contentView.addSubview(dateLabel)
+
+        dateLabel.snp.makeConstraints { (make) in
+            make.centerY.equalTo(userImageView.snp.centerY)
+            make.leading.greaterThanOrEqualTo(nameLabel.snp.trailing).offset(10)
             make.trailing.equalToSuperview().inset(10)
         }
 
     }
     
-    func configure(with user: User) {
+    func configure(user: User) {
         self.nameLabel.text = user.email
 
         if let profileImageUrl = user.profileImageUrl, let url = URL(string: profileImageUrl) {
             self.userImageView.kf.setImage(with: url)
+        }
+    }
+
+    func configure(message: Message) {
+        if let toId = message.toId {
+            let ref = Database.database().reference().child("users").child(toId)
+            ref.observeSingleEvent(of: .value) { [weak self] (snapshot) in
+                guard let dictionary = snapshot.value as? [String: AnyObject] else { return }
+                let user = User(dictionary: dictionary)
+
+                if let profileImageUrl = user.profileImageUrl, let url = URL(string: profileImageUrl) {
+                    self?.userImageView.kf.setImage(with: url)
+                }
+
+                self?.nameLabel.text = user.email
+                let date = Date(timeIntervalSince1970: message.date!)
+                self?.dateLabel.text = self?.dateFormatter.string(from: date)
+            }
         }
     }
 

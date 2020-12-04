@@ -46,7 +46,7 @@ class NewMessageController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! UserCell
         let user = users[indexPath.row]
-        cell.configure(with: user)
+        cell.configure(user: user)
         return cell
     }
     
