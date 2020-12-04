@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import Firebase
 
 class ChatController: UIViewController {
     private var chatView = ChatView()
@@ -22,6 +23,16 @@ class ChatController: UIViewController {
         title = "Chat Controller"
 
         chatView.collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
+        chatView.textField.delegate = self
+        chatView.sendButton.addTarget(self, action: #selector(sendButtonAction), for: .touchUpInside)
+    }
+
+    @objc func sendButtonAction() {
+        let ref = Database.database().reference().child("messages")
+        let childRef = ref.childByAutoId()
+        guard let text = chatView.textField.text, !text.isEmpty else { return }
+        let values = ["text": text, "name": "Max"] as [String: Any]
+        childRef.updateChildValues(values)
     }
 }
 
@@ -40,5 +51,12 @@ extension ChatController: UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath)
     
         return cell
+    }
+}
+
+extension ChatController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        sendButtonAction()
+        return true
     }
 }
