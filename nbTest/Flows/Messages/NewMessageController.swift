@@ -11,6 +11,7 @@ import Kingfisher
 
 class NewMessageController: UITableViewController {
     var users = [User]()
+    var messagesController: MessagesController?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,8 +27,8 @@ class NewMessageController: UITableViewController {
         Database.database().reference().child("users").observe(.childAdded) { (snapshot) in
             //print(snapshot)
             if let dictionary = snapshot.value as? [String: AnyObject] {
-                //let user = User(email: (dictionary["email"] as? String)) //FIXME: add User init from DataSnapshot
-                let user = User(dictionary: dictionary) //FIXME: add User init from DataSnapshot
+                let user = User(dictionary: dictionary)
+                user.id = snapshot.key
                 self.users.append(user)
                 self.tableView.reloadData()
             }
@@ -47,5 +48,12 @@ class NewMessageController: UITableViewController {
         let user = users[indexPath.row]
         cell.configure(with: user)
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        dismiss(animated: true) { [weak self] in
+            guard let user = self?.users[indexPath.row] else { return }
+            self?.messagesController?.showChatWithUser(user)
+        }
     }
 }

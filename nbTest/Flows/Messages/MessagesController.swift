@@ -10,6 +10,7 @@ import FirebaseAuth
 import FirebaseDatabase
 
 class MessagesController: UITableViewController {
+    var messages = [Message]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,10 +20,25 @@ class MessagesController: UITableViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: image, style: .plain, target: self, action: #selector(MessagesController.handleNewMessage))
 
         checkIfUserIsLoggedIn()
+        observeMessages()
+    }
+
+    func observeMessages() {
+        let ref = Database.database().reference().child("messages")
+        ref.observe(.childAdded) { (snapshot) in
+            if let dictionary = snapshot.value as? [String: AnyObject] {
+                let message = Message(dictionary: dictionary)
+                self.messages.append(message)
+            }
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
     }
 
     @objc func handleNewMessage() {
         let newMessageController = NewMessageController()
+        newMessageController.messagesController = self
         let navController = UINavigationController(rootViewController: newMessageController)
         present(navController, animated: true, completion: nil)
         
@@ -52,23 +68,26 @@ class MessagesController: UITableViewController {
         present(login, animated: true, completion: nil)
     }
 
-    @objc func showChatController() {
+    @objc func showChatWithUser(_ user: User) {
         let chatController = ChatController()
+        chatController.user = user
         navigationController?.pushViewController(chatController, animated: true)
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return messages.count
     }
-    
+
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell()
-        cell.textLabel?.text = "Chat Controller"
+        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "Cell")
+        let message = messages[indexPath.row]
+        cell.textLabel?.text = message.toId
+        cell.detailTextLabel?.text = message.text
         return cell
     }
-    
+
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        showChatController()
+        //showChatWithUser()
     }
 
 }

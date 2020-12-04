@@ -11,6 +11,11 @@ import Firebase
 
 class ChatController: UIViewController {
     private var chatView = ChatView()
+    var user: User? {
+        didSet {
+            title = user?.email
+        }
+    }
 
     override func loadView() {
         super.loadView()
@@ -20,8 +25,6 @@ class ChatController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        title = "Chat Controller"
-
         chatView.collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
         chatView.textField.delegate = self
         chatView.sendButton.addTarget(self, action: #selector(sendButtonAction), for: .touchUpInside)
@@ -30,8 +33,13 @@ class ChatController: UIViewController {
     @objc func sendButtonAction() {
         let ref = Database.database().reference().child("messages")
         let childRef = ref.childByAutoId()
-        guard let text = chatView.textField.text, !text.isEmpty else { return }
-        let values = ["text": text, "name": "Max"] as [String: Any]
+        guard let text = chatView.textField.text,
+              !text.isEmpty,
+              let toId = user?.id,
+              let fromId = Auth.auth().currentUser?.uid
+        else { return }
+        let date = Date().timeIntervalSince1970
+        let values = ["text": text, "toId": toId, "fromId": fromId, "date": date] as [String: Any]
         childRef.updateChildValues(values)
     }
 }
