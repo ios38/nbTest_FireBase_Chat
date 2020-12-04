@@ -8,45 +8,36 @@
 import UIKit
 import SnapKit
 
-private let reuseIdentifier = "Cell"
+class ChatController: UIViewController {
+    private var chatView = ChatView()
 
-class ChatController: UICollectionViewController {
+    override func loadView() {
+        super.loadView()
+        self.view = chatView
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         title = "Chat Controller"
-        setupInputView()
 
-        self.collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
+        chatView.collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
     }
+}
 
-    func setupInputView() {
-        let inputView = UIView()
-        inputView.backgroundColor = .secondarySystemBackground
-        
-        view.addSubview(inputView)
-        
-        inputView.snp.makeConstraints { (make) in
-            make.leading.trailing.equalToSuperview()
-            make.height.equalTo(50)
-            make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
-        }
-    }
-
-    // MARK: UICollectionViewDataSource
-
-    override func numberOfSections(in collectionView: UICollectionView) -> Int {
+extension ChatController: UICollectionViewDataSource {
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 0
     }
 
 
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 0
     }
 
-    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath)
     
         return cell
     }

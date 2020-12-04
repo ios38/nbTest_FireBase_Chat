@@ -53,7 +53,7 @@ class MessagesController: UITableViewController {
     }
 
     @objc func showChatController() {
-        let chatController = ChatController(collectionViewLayout: UICollectionViewLayout())
+        let chatController = ChatController()
         navigationController?.pushViewController(chatController, animated: true)
     }
 

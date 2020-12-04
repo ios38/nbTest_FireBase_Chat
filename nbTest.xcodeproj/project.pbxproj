@@ -24,6 +24,7 @@
 		50FA816525777439006F58BC /* NewMessageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50FA816025777439006F58BC /* NewMessageController.swift */; };
 		50FA816625777439006F58BC /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50FA816225777439006F58BC /* LoginView.swift */; };
 		50FA816725777439006F58BC /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50FA816325777439006F58BC /* LoginController.swift */; };
+		50FA81A62579DFD1006F58BC /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50FA81A52579DFD1006F58BC /* ChatView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +47,7 @@
 		50FA816025777439006F58BC /* NewMessageController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewMessageController.swift; sourceTree = "<group>"; };
 		50FA816225777439006F58BC /* LoginView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		50FA816325777439006F58BC /* LoginController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
+		50FA81A52579DFD1006F58BC /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
 		850CA6EC14592C6209F0E5B0 /* Pods-nbTest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-nbTest.release.xcconfig"; path = "Target Support Files/Pods-nbTest/Pods-nbTest.release.xcconfig"; sourceTree = "<group>"; };
 		FB163DF3B20BDAF7CF8DD95A /* Pods_nbTest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_nbTest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -128,6 +130,7 @@
 			isa = PBXGroup;
 			children = (
 				505BFE2E2578A86B00D50FDB /* UserCell.swift */,
+				50FA81A52579DFD1006F58BC /* ChatView.swift */,
 				505BFE5B25791A1600D50FDB /* ChatController.swift */,
 				50FA815F25777439006F58BC /* MessagesController.swift */,
 				50FA816025777439006F58BC /* NewMessageController.swift */,
@@ -279,6 +282,7 @@
 				5075FD65257396F30034C642 /* GbViewController.swift in Sources */,
 				501A16E42574D73F0096669A /* GbLoginController.swift in Sources */,
 				50FA816625777439006F58BC /* LoginView.swift in Sources */,
+				50FA81A62579DFD1006F58BC /* ChatView.swift in Sources */,
 				5075FD61257396F30034C642 /* AppDelegate.swift in Sources */,
 				50FA816425777439006F58BC /* MessagesController.swift in Sources */,
 				501A16E52574D73F0096669A /* GbLoginView.swift in Sources */,
