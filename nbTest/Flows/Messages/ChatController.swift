@@ -40,7 +40,18 @@ class ChatController: UIViewController {
         else { return }
         let date = Date().timeIntervalSince1970
         let values = ["text": text, "toId": toId, "fromId": fromId, "date": date] as [String: Any]
-        childRef.updateChildValues(values)
+        childRef.updateChildValues(values) { (error, ref) in
+            if let error = error {
+                print(error)
+                return
+            }
+            let userMessageRef = Database.database().reference().child("user_messages").child(fromId)
+            guard let messageId = childRef.key else { return }
+            userMessageRef.updateChildValues([messageId: 0])
+            
+            let recipientRef = Database.database().reference().child("user_messages").child(toId)
+            recipientRef.updateChildValues([messageId: 0])
+        }
     }
 }
 

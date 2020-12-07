@@ -72,21 +72,35 @@ class UserCell: UITableViewCell {
     }
 
     func configure(message: Message) {
-        if let toId = message.toId {
-            let ref = Database.database().reference().child("users").child(toId)
-            ref.observeSingleEvent(of: .value) { [weak self] (snapshot) in
-                guard let dictionary = snapshot.value as? [String: AnyObject] else { return }
-                let user = User(dictionary: dictionary)
-
-                if let profileImageUrl = user.profileImageUrl, let url = URL(string: profileImageUrl) {
-                    self?.userImageView.kf.setImage(with: url)
-                }
-
-                self?.nameLabel.text = user.email
-                let date = Date(timeIntervalSince1970: message.date!)
-                self?.dateLabel.text = self?.dateFormatter.string(from: date)
-            }
+        if let toId = message.toId, let fromId = message.fromId {
+            self.setupUser(toId: toId, fromId: fromId)
+            let date = Date(timeIntervalSince1970: message.date!)
+            self.dateLabel.text = self.dateFormatter.string(from: date)
         }
+    }
+
+    private func setupUser(toId: String, fromId: String) {
+        var chatPartnerId: String?
+        
+        if fromId == Auth.auth().currentUser?.uid {
+            chatPartnerId = toId
+        } else {
+            chatPartnerId = fromId
+        }
+        
+        guard let toId = chatPartnerId else { return }
+        let ref = Database.database().reference().child("users").child(toId)
+        ref.observeSingleEvent(of: .value) { [weak self] (snapshot) in
+            guard let dictionary = snapshot.value as? [String: AnyObject] else { return }
+            let user = User(dictionary: dictionary)
+
+            if let profileImageUrl = user.profileImageUrl, let url = URL(string: profileImageUrl) {
+                self?.userImageView.kf.setImage(with: url)
+            }
+
+            self?.nameLabel.text = user.email
+        }
+
     }
 
 }

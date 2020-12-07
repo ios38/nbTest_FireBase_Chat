@@ -23,7 +23,33 @@ class MessagesController: UITableViewController {
 
         tableView.register(UserCell.self, forCellReuseIdentifier: "Cell")
         checkIfUserIsLoggedIn()
-        observeMessages()
+        observeUserMessages()
+        //observeMessages()
+    }
+
+    func observeUserMessages() {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        let ref = Database.database().reference().child("user_messages").child(uid)
+        ref.observe(.childAdded) { (snapshot) in
+            let messageId = snapshot.key
+            let messageRef = Database.database().reference().child("messages").child(messageId)
+            messageRef.observeSingleEvent(of: .value) { (snapshot) in
+                if let dictionary = snapshot.value as? [String: AnyObject] {
+                    let message = Message(dictionary: dictionary)
+                    self.messages.append(message)
+                    
+                    if let toId = message.toId {
+                        self.messagesDict[toId] = message
+                    }
+                    
+                    self.messages = Array(self.messagesDict.values)
+                    self.messages.sort { $0.date! > $1.date! }
+                }
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+            }
+        }
     }
 
     func observeMessages() {
@@ -70,6 +96,9 @@ class MessagesController: UITableViewController {
     @objc func handleLogout() {
         do {
             try Auth.auth().signOut()
+            messages.removeAll()
+            messagesDict.removeAll()
+            tableView.reloadData()
         } catch let logoutError {
             print(logoutError)
         }
