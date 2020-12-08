@@ -29,7 +29,6 @@ class ChatController: UIViewController {
 
         chatView.collectionView.dataSource = self
         chatView.collectionView.delegate = self
-        chatView.collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
         chatView.textField.delegate = self
         chatView.sendButton.addTarget(self, action: #selector(sendButtonAction), for: .touchUpInside)
     }
@@ -43,10 +42,13 @@ class ChatController: UIViewController {
             messageRef.observeSingleEvent(of: .value) { [weak self] (snapshot) in
                 guard let dictionary = snapshot.value as? [String: AnyObject] else { return }
                 let message = Message(dictionary: dictionary)
-                self?.messages.append(message)
-                DispatchQueue.main.async {
-                    self?.chatView.collectionView.reloadData()
-                }
+                
+                if message.chatPartnerId() == self?.user?.id {
+                    self?.messages.append(message)
+                    DispatchQueue.main.async {
+                        self?.chatView.collectionView.reloadData()
+                    }
+                }                
             }
         }
     }
@@ -83,13 +85,13 @@ extension ChatController: UICollectionViewDataSource, UICollectionViewDelegateFl
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath)
-        cell.backgroundColor = .darkGray
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MessageCell", for: indexPath) as! MessageCell
+        cell.textView.text = messages[indexPath.item].text
         return cell
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.height, height: 80)
+        return CGSize(width: view.frame.width, height: 80)
     }
 
 }
