@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Firebase
 
 class Message: NSObject {
     
@@ -19,5 +20,9 @@ class Message: NSObject {
         self.text = dictionary["text"] as? String
         self.date = dictionary["date"] as? Double
         self.toId = dictionary["toId"] as? String
+    }
+
+    func chatPartnerId() -> String? { //FiXME: to var?
+        return fromId == Auth.auth().currentUser?.uid ? toId : fromId
     }
 }

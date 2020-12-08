@@ -107,12 +107,6 @@ class MessagesController: UITableViewController {
         present(login, animated: true, completion: nil)
     }
 
-    @objc func showChatWithUser(_ user: User) {
-        let chatController = ChatController()
-        chatController.user = user
-        navigationController?.pushViewController(chatController, animated: true)
-    }
-
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return messages.count
     }
@@ -125,7 +119,22 @@ class MessagesController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //showChatWithUser()
+        let message = messages[indexPath.row]
+        
+        guard let chatPartnerId = message.chatPartnerId() else { return }
+        let ref = Database.database().reference().child("users").child(chatPartnerId)
+        ref.observeSingleEvent(of: .value) { [weak self] (snapshot) in
+            if let dictionary = snapshot.value as? [String: AnyObject] {
+                let user = User(dictionary: dictionary)
+                self?.showChatWithUser(user)
+            }
+        }
+    }
+
+    @objc func showChatWithUser(_ user: User) {
+        let chatController = ChatController()
+        chatController.user = user
+        navigationController?.pushViewController(chatController, animated: true)
     }
 
 }

@@ -72,24 +72,15 @@ class UserCell: UITableViewCell {
     }
 
     func configure(message: Message) {
-        if let toId = message.toId, let fromId = message.fromId {
-            self.setupUser(toId: toId, fromId: fromId)
+        if let id = message.chatPartnerId() {
+            self.setupUser(id: id)
             let date = Date(timeIntervalSince1970: message.date!)
             self.dateLabel.text = self.dateFormatter.string(from: date)
         }
     }
 
-    private func setupUser(toId: String, fromId: String) {
-        var chatPartnerId: String?
-        
-        if fromId == Auth.auth().currentUser?.uid {
-            chatPartnerId = toId
-        } else {
-            chatPartnerId = fromId
-        }
-        
-        guard let toId = chatPartnerId else { return }
-        let ref = Database.database().reference().child("users").child(toId)
+    private func setupUser(id: String) {
+        let ref = Database.database().reference().child("users").child(id)
         ref.observeSingleEvent(of: .value) { [weak self] (snapshot) in
             guard let dictionary = snapshot.value as? [String: AnyObject] else { return }
             let user = User(dictionary: dictionary)
