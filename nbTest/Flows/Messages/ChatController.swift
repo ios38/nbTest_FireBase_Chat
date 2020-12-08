@@ -19,6 +19,8 @@ class ChatController: UIViewController {
         }
     }
 
+    var bubbleWidth: CGFloat = 300
+    
     override func loadView() {
         super.loadView()
         self.view = chatView
@@ -33,6 +35,10 @@ class ChatController: UIViewController {
         chatView.sendButton.addTarget(self, action: #selector(sendButtonAction), for: .touchUpInside)
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        bubbleWidth = view.frame.size.width - 100
+    }
+    
     func observeMessages() {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         let userMessageRef = Database.database().reference().child("user_messages").child(uid)
@@ -86,14 +92,28 @@ extension ChatController: UICollectionViewDataSource, UICollectionViewDelegateFl
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MessageCell", for: indexPath) as! MessageCell
-        cell.textView.text = messages[indexPath.item].text
+        if let text = messages[indexPath.item].text {
+            let bubbleWidth = estimateFrameForText(text: text).width + 30
+            cell.bubbleWidth = bubbleWidth
+            cell.textView.text = text
+        }
         return cell
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.width, height: 80)
+        var height: CGFloat = 100
+        
+        if let text = messages[indexPath.item].text {
+            height = estimateFrameForText(text: text).height + 20
+        }
+        return CGSize(width: view.frame.width, height: height)
     }
 
+    func estimateFrameForText(text: String) -> CGRect {
+        let size = CGSize(width: bubbleWidth, height: 500)
+        let options = NSStringDrawingOptions.usesFontLeading.union(.usesLineFragmentOrigin)
+        return NSString(string: text).boundingRect(with: size, options: options, attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16)], context: nil)
+    }
 }
 
 extension ChatController: UITextFieldDelegate {

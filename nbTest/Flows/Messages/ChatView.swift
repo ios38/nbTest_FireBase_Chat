@@ -65,18 +65,17 @@ class ChatView: UIView {
 
     func setupCollectionView() {
         //collectionView.contentInset = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
-        //if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-        //    layout.itemSize = CGSize(width: frame.width, height: 80)
-        //    layout.scrollDirection = .vertical
-        //    layout.minimumLineSpacing = 3
-        //}
+        if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+            layout.minimumLineSpacing = 5
+        }
         collectionView.alwaysBounceVertical = true
         collectionView.register(MessageCell.self, forCellWithReuseIdentifier: "MessageCell")
         addSubview(collectionView)
 
         collectionView.snp.makeConstraints { (make) in
-            make.leading.trailing.equalToSuperview()
-            make.top.equalTo(self.safeAreaLayoutGuide.snp.top)
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.top.equalTo(self.safeAreaLayoutGuide.snp.top).inset(5)
             make.bottom.equalTo(sendView.snp.top)
         }
     }

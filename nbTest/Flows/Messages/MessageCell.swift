@@ -6,29 +6,51 @@
 //
 
 import UIKit
+import SnapKit
 
 class MessageCell: UICollectionViewCell {
-    let textView = UILabel()
+    let bubbleView = UIView()
+    let textView = UITextView()
+    var bubbleWidth: CGFloat? {
+        didSet {
+            bubbleView.snp.removeConstraints()
+            bubbleView.snp.makeConstraints { (make) in
+                make.top.bottom.trailing.equalToSuperview()
+                make.width.equalTo(bubbleWidth ?? 200)
+            }
+        }
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
 
+        setupBubbleView()
         setupTextView()
-        backgroundColor = .secondarySystemBackground
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
+    func setupBubbleView() {
+        bubbleView.backgroundColor = .secondarySystemBackground
+        bubbleView.layer.cornerRadius = 10
+        contentView.addSubview(bubbleView)
+
+        bubbleView.snp.makeConstraints { (make) in
+            make.top.bottom.trailing.equalToSuperview()
+            make.width.equalTo(bubbleWidth ?? 200)
+        }
+    }
+
     func setupTextView() {
-        textView.textColor = .label
+        textView.backgroundColor = .clear
         textView.font = UIFont.systemFont(ofSize: 16)
-        textView.text = "Test"
-        contentView.addSubview(textView)
+        bubbleView.addSubview(textView)
 
         textView.snp.makeConstraints { (make) in
-            make.top.leading.equalToSuperview().inset(10)
+            make.top.bottom.equalToSuperview()
+            make.leading.trailing.equalToSuperview().inset(5)
         }
     }
 }
