@@ -11,9 +11,11 @@ import Firebase
 
 class ChatController: UIViewController {
     private var chatView = ChatView()
+    var messages = [Message]()
     var user: User? {
         didSet {
             title = user?.email
+            observeMessages()
         }
     }
 
@@ -25,9 +27,28 @@ class ChatController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        chatView.collectionView.dataSource = self
+        chatView.collectionView.delegate = self
         chatView.collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
         chatView.textField.delegate = self
         chatView.sendButton.addTarget(self, action: #selector(sendButtonAction), for: .touchUpInside)
+    }
+
+    func observeMessages() {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        let userMessageRef = Database.database().reference().child("user_messages").child(uid)
+        userMessageRef.observe(.childAdded) { (snapshot) in
+            let messageId = snapshot.key
+            let messageRef = Database.database().reference().child("messages").child(messageId)
+            messageRef.observeSingleEvent(of: .value) { [weak self] (snapshot) in
+                guard let dictionary = snapshot.value as? [String: AnyObject] else { return }
+                let message = Message(dictionary: dictionary)
+                self?.messages.append(message)
+                DispatchQueue.main.async {
+                    self?.chatView.collectionView.reloadData()
+                }
+            }
+        }
     }
 
     @objc func sendButtonAction() {
@@ -55,22 +76,22 @@ class ChatController: UIViewController {
     }
 }
 
-extension ChatController: UICollectionViewDataSource {
+extension ChatController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 0
-    }
-
-
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 0
+        return messages.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath)
-    
+        cell.backgroundColor = .darkGray
         return cell
     }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: view.frame.height, height: 80)
+    }
+
 }
 
 extension ChatController: UITextFieldDelegate {

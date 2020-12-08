@@ -8,7 +8,7 @@
 import UIKit
 
 class ChatView: UIView {
-    var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
+    var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     var sendView = UIView()
     var textField = UITextField()
     var sendButton = UIButton(type: .system)
@@ -19,6 +19,7 @@ class ChatView: UIView {
         setupSendView()
         setupSendButton()
         setupTextField()
+        setupCollectionView()
     }
     
     required init?(coder: NSCoder) {
@@ -62,4 +63,13 @@ class ChatView: UIView {
         }
     }
 
+    func setupCollectionView() {
+        addSubview(collectionView)
+
+        collectionView.snp.makeConstraints { (make) in
+            make.leading.trailing.equalToSuperview()
+            make.top.equalTo(self.safeAreaLayoutGuide.snp.top)
+            make.bottom.equalTo(sendView.snp.top)
+        }
+    }
 }

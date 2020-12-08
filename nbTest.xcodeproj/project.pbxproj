@@ -21,6 +21,7 @@
 		5075FD8D25739D9D0034C642 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5075FD8C25739D9D0034C642 /* GoogleService-Info.plist */; };
 		507DC0CD2575E0EA000574CE /* FirebaseAd.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507DC0CC2575E0E9000574CE /* FirebaseAd.swift */; };
 		50C5D694257A164D0084AE49 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C5D693257A164D0084AE49 /* Message.swift */; };
+		50C5D699257F6D490084AE49 /* MessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C5D698257F6D490084AE49 /* MessageCell.swift */; };
 		50FA816425777439006F58BC /* MessagesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50FA815F25777439006F58BC /* MessagesController.swift */; };
 		50FA816525777439006F58BC /* NewMessageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50FA816025777439006F58BC /* NewMessageController.swift */; };
 		50FA816625777439006F58BC /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50FA816225777439006F58BC /* LoginView.swift */; };
@@ -45,6 +46,7 @@
 		5075FD8C25739D9D0034C642 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		507DC0CC2575E0E9000574CE /* FirebaseAd.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAd.swift; sourceTree = "<group>"; };
 		50C5D693257A164D0084AE49 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		50C5D698257F6D490084AE49 /* MessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCell.swift; sourceTree = "<group>"; };
 		50FA815F25777439006F58BC /* MessagesController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessagesController.swift; sourceTree = "<group>"; };
 		50FA816025777439006F58BC /* NewMessageController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewMessageController.swift; sourceTree = "<group>"; };
 		50FA816225777439006F58BC /* LoginView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
@@ -133,6 +135,7 @@
 			isa = PBXGroup;
 			children = (
 				505BFE2E2578A86B00D50FDB /* UserCell.swift */,
+				50C5D698257F6D490084AE49 /* MessageCell.swift */,
 				50FA81A52579DFD1006F58BC /* ChatView.swift */,
 				505BFE5B25791A1600D50FDB /* ChatController.swift */,
 				50FA815F25777439006F58BC /* MessagesController.swift */,
@@ -282,6 +285,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				50FA816525777439006F58BC /* NewMessageController.swift in Sources */,
+				50C5D699257F6D490084AE49 /* MessageCell.swift in Sources */,
 				5075FD65257396F30034C642 /* GbViewController.swift in Sources */,
 				501A16E42574D73F0096669A /* GbLoginController.swift in Sources */,
 				50FA816625777439006F58BC /* LoginView.swift in Sources */,

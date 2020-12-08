@@ -126,12 +126,13 @@ class MessagesController: UITableViewController {
         ref.observeSingleEvent(of: .value) { [weak self] (snapshot) in
             if let dictionary = snapshot.value as? [String: AnyObject] {
                 let user = User(dictionary: dictionary)
+                user.id = chatPartnerId
                 self?.showChatWithUser(user)
             }
         }
     }
 
-    @objc func showChatWithUser(_ user: User) {
+    func showChatWithUser(_ user: User) {
         let chatController = ChatController()
         chatController.user = user
         navigationController?.pushViewController(chatController, animated: true)
