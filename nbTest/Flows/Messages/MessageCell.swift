@@ -22,6 +22,8 @@ class MessageCell: UICollectionViewCell {
         }
     }
     
+    static let userMessageColor = UIColor.systemBlue
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
 
@@ -34,7 +36,7 @@ class MessageCell: UICollectionViewCell {
     }
 
     func setupBubbleView() {
-        bubbleView.backgroundColor = .secondarySystemBackground
+        bubbleView.backgroundColor = MessageCell.userMessageColor
         bubbleView.layer.cornerRadius = 10
         bubbleView.layer.masksToBounds = true
         contentView.addSubview(bubbleView)
