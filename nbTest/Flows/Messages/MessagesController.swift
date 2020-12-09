@@ -12,7 +12,12 @@ import FirebaseDatabase
 class MessagesController: UITableViewController {
     var messages = [Message]()
     var messagesDict = [String: Message]()
+    var timer: Timer?
 
+    deinit {
+        timer?.invalidate()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -33,7 +38,7 @@ class MessagesController: UITableViewController {
         ref.observe(.childAdded) { (snapshot) in
             let messageId = snapshot.key
             let messageRef = Database.database().reference().child("messages").child(messageId)
-            messageRef.observeSingleEvent(of: .value) { (snapshot) in
+            messageRef.observeSingleEvent(of: .value) { [unowned self] (snapshot) in
                 if let dictionary = snapshot.value as? [String: AnyObject] {
                     let message = Message(dictionary: dictionary)
                     self.messages.append(message)
@@ -45,10 +50,15 @@ class MessagesController: UITableViewController {
                     self.messages = Array(self.messagesDict.values)
                     self.messages.sort { $0.date! > $1.date! }
                 }
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                }
+                
+                self.timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.handleReloadTable), userInfo: nil, repeats: false)
             }
+        }
+    }
+
+    @objc func handleReloadTable() {
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
         }
     }
 

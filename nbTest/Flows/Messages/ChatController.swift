@@ -99,10 +99,13 @@ extension ChatController: UICollectionViewDataSource, UICollectionViewDelegateFl
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MessageCell", for: indexPath) as! MessageCell
-        if let text = messages[indexPath.item].text {
+        let message = messages[indexPath.item]
+        if let text = message.text {
             let bubbleWidth = estimateFrameForText(text: text).width + 25
-            cell.bubbleWidth = bubbleWidth
+            //cell.bubbleWidth = bubbleWidth
+            cell.bubbleWidth?.constant = bubbleWidth
             cell.textView.text = text
+            setupCell(cell, message: message)
         }
         return cell
     }
@@ -120,6 +123,24 @@ extension ChatController: UICollectionViewDataSource, UICollectionViewDelegateFl
         let size = CGSize(width: bubbleWidth, height: 500)
         let options = NSStringDrawingOptions.usesFontLeading.union(.usesLineFragmentOrigin)
         return NSString(string: text).boundingRect(with: size, options: options, attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16)], context: nil)
+    }
+    
+    func setupCell(_ cell: MessageCell, message: Message) {
+        if let profileImageUrl = user?.profileImageUrl, let url = URL(string: profileImageUrl) {
+            cell.userImageView.kf.setImage(with: url)
+        }
+
+        if message.fromId == Auth.auth().currentUser?.uid {
+            cell.bubbleView.backgroundColor = MessageCell.userMessageColor
+            cell.userImageView.isHidden = true
+            cell.bubbleLeading?.isActive = false
+            cell.bubbleTrailing?.isActive = true
+        } else {
+            cell.bubbleView.backgroundColor = .secondarySystemBackground
+            cell.userImageView.isHidden = false
+            cell.bubbleLeading?.isActive = true
+            cell.bubbleTrailing?.isActive = false
+        }
     }
 }
 
