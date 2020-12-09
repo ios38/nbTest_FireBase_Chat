@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 class ChatView: UIView {
     var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
@@ -13,6 +14,8 @@ class ChatView: UIView {
     var textField = UITextField()
     var sendButton = UIButton(type: .system)
 
+    var sendViewBottom: NSLayoutConstraint?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
 
@@ -26,16 +29,30 @@ class ChatView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override var inputAccessoryView: UIView? {
+        get {
+            let containerVew = UIView()
+            return containerVew
+        }
+    }
+    
     func setupSendView() {
         sendView.backgroundColor = .secondarySystemBackground
-        
+        sendView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(sendView)
         
+        sendView.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
+        sendView.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
+        sendView.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        
+        sendViewBottom = sendView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor)
+        sendViewBottom?.isActive = true
+        /*
         sendView.snp.makeConstraints { (make) in
             make.leading.trailing.equalToSuperview()
             make.height.equalTo(50)
             make.bottom.equalTo(self.safeAreaLayoutGuide.snp.bottom)
-        }
+        }*/
     }
 
     func setupTextField() {

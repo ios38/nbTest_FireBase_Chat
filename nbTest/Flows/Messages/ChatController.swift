@@ -31,16 +31,57 @@ class ChatController: UIViewController {
 
         chatView.collectionView.dataSource = self
         chatView.collectionView.delegate = self
+        chatView.collectionView.keyboardDismissMode = .interactive
+
         chatView.textField.delegate = self
         chatView.sendButton.addTarget(self, action: #selector(sendButtonAction), for: .touchUpInside)
+        
+        setupKeyboardObservers()
+        
+        let hideKeyboardGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+        chatView.collectionView.addGestureRecognizer(hideKeyboardGesture)
     }
 
     override func viewWillAppear(_ animated: Bool) {
         bubbleWidth = view.frame.size.width - 100
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        NotificationCenter.default.removeObserver(self)
+    }
+
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         chatView.collectionView.collectionViewLayout.invalidateLayout()
+    }
+
+    func setupKeyboardObservers() {
+        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+
+    }
+
+    @objc func handleKeyboardWillShow(notification: Notification) {
+        let info = notification.userInfo! as NSDictionary
+        //let keyboardSize = (info.value(forKey: UIResponder.keyboardFrameEndUserInfoKey) as! NSValue).cgRectValue.size
+        let keyboardFrame = info.value(forKey: UIResponder.keyboardFrameEndUserInfoKey) as! CGRect
+        let keyboardDuration = info.value(forKey: UIResponder.keyboardAnimationDurationUserInfoKey) as! Double
+        chatView.sendViewBottom?.constant = chatView.safeAreaInsets.bottom - keyboardFrame.height
+        UIView.animate(withDuration: keyboardDuration) {
+            self.view.layoutIfNeeded()
+        }
+    }
+
+    @objc func handleKeyboardWillHide(notification: Notification) {
+        let info = notification.userInfo! as NSDictionary
+        let keyboardDuration = info.value(forKey: UIResponder.keyboardAnimationDurationUserInfoKey) as! Double
+        chatView.sendViewBottom?.constant = 0
+        UIView.animate(withDuration: keyboardDuration) {
+            self.view.layoutIfNeeded()
+        }
+    }
+
+    @objc func hideKeyboard() {
+        self.chatView.endEditing(true)
     }
 
     func observeMessages() {
@@ -80,6 +121,7 @@ class ChatController: UIViewController {
             }
 
             self?.chatView.textField.text = nil
+            self?.chatView.endEditing(true)
             
             let userMessageRef = Database.database().reference().child("user_messages").child(fromId)
             guard let messageId = childRef.key else { return }
