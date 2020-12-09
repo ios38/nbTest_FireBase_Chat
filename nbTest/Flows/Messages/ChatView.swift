@@ -64,7 +64,7 @@ class ChatView: UIView {
     }
 
     func setupCollectionView() {
-        //collectionView.contentInset = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+        collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 5, right: 0)
         if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             layout.minimumLineSpacing = 5
         }

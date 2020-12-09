@@ -15,7 +15,8 @@ class MessageCell: UICollectionViewCell {
         didSet {
             bubbleView.snp.removeConstraints()
             bubbleView.snp.makeConstraints { (make) in
-                make.top.bottom.trailing.equalToSuperview()
+                make.top.bottom.equalToSuperview()
+                make.trailing.equalToSuperview().inset(5)
                 make.width.equalTo(bubbleWidth ?? 200)
             }
         }
@@ -35,10 +36,12 @@ class MessageCell: UICollectionViewCell {
     func setupBubbleView() {
         bubbleView.backgroundColor = .secondarySystemBackground
         bubbleView.layer.cornerRadius = 10
+        bubbleView.layer.masksToBounds = true
         contentView.addSubview(bubbleView)
 
         bubbleView.snp.makeConstraints { (make) in
-            make.top.bottom.trailing.equalToSuperview()
+            make.top.bottom.equalToSuperview()
+            make.trailing.equalToSuperview().inset(5)
             make.width.equalTo(bubbleWidth ?? 200)
         }
     }

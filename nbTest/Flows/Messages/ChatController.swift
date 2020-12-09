@@ -39,6 +39,10 @@ class ChatController: UIViewController {
         bubbleWidth = view.frame.size.width - 100
     }
     
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        chatView.collectionView.collectionViewLayout.invalidateLayout()
+    }
+
     func observeMessages() {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         let userMessageRef = Database.database().reference().child("user_messages").child(uid)
@@ -69,11 +73,14 @@ class ChatController: UIViewController {
         else { return }
         let date = Date().timeIntervalSince1970
         let values = ["text": text, "toId": toId, "fromId": fromId, "date": date] as [String: Any]
-        childRef.updateChildValues(values) { (error, ref) in
+        childRef.updateChildValues(values) { [weak self] (error, ref) in
             if let error = error {
                 print(error)
                 return
             }
+
+            self?.chatView.textField.text = nil
+            
             let userMessageRef = Database.database().reference().child("user_messages").child(fromId)
             guard let messageId = childRef.key else { return }
             userMessageRef.updateChildValues([messageId: 0])
@@ -93,7 +100,7 @@ extension ChatController: UICollectionViewDataSource, UICollectionViewDelegateFl
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MessageCell", for: indexPath) as! MessageCell
         if let text = messages[indexPath.item].text {
-            let bubbleWidth = estimateFrameForText(text: text).width + 30
+            let bubbleWidth = estimateFrameForText(text: text).width + 25
             cell.bubbleWidth = bubbleWidth
             cell.textView.text = text
         }
