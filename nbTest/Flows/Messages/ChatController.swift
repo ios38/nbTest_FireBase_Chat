@@ -54,6 +54,15 @@ class ChatController: UIViewController {
         chatView.collectionView.collectionViewLayout.invalidateLayout()
     }
 
+    override var inputAccessoryView: UIView? {
+        return chatView.sendView
+        
+    }
+    
+    override var canBecomeFirstResponder: Bool {
+        return true
+    }
+
     func setupKeyboardObservers() {
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
@@ -81,7 +90,8 @@ class ChatController: UIViewController {
     }
 
     @objc func hideKeyboard() {
-        self.chatView.endEditing(true)
+        print("hideKeyboardGesture")
+        self.view.endEditing(true)
     }
 
     func observeMessages() {

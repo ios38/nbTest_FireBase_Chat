@@ -27,15 +27,15 @@ class ChatView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override var inputAccessoryView: UIView? {
-        get {
-            return sendView
-        }
-    }
-    
-    override var canBecomeFirstResponder: Bool {
-        return true
-    }
+//    override var inputAccessoryView: UIView? {
+//        get {
+//            return sendView
+//        }
+//    }
+//
+//    override var canBecomeFirstResponder: Bool {
+//        return true
+//    }
 
     func setupSendView() {
         sendView.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: 50)
@@ -86,7 +86,7 @@ class ChatView: UIView {
     }
 
     func setupCollectionView() {
-        //collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 5, right: 0)
+        collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 5, right: 0)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             layout.minimumLineSpacing = 5
