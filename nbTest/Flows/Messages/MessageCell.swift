@@ -72,6 +72,7 @@ class MessageCell: UICollectionViewCell {
         bubbleTrailing?.isActive = true
 
         bubbleWidth = bubbleView.widthAnchor.constraint(equalToConstant: 200)
+        bubbleWidth?.priority = UILayoutPriority(rawValue: 999)
         bubbleWidth?.isActive = true
         
         bubbleView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true

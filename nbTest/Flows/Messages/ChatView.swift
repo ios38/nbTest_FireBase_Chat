@@ -14,14 +14,12 @@ class ChatView: UIView {
     var textField = UITextField()
     var sendButton = UIButton(type: .system)
 
-    var sendViewBottom: NSLayoutConstraint?
+    var collectionViewBottom: NSLayoutConstraint?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
 
         setupSendView()
-        setupSendButton()
-        setupTextField()
         setupCollectionView()
     }
     
@@ -31,28 +29,35 @@ class ChatView: UIView {
     
     override var inputAccessoryView: UIView? {
         get {
-            let containerVew = UIView()
-            return containerVew
+            return sendView
         }
     }
     
+    override var canBecomeFirstResponder: Bool {
+        return true
+    }
+
     func setupSendView() {
+        sendView.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: 50)
         sendView.backgroundColor = .secondarySystemBackground
         sendView.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(sendView)
-        
+        //addSubview(sendView)
+        /*
         sendView.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
         sendView.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
         sendView.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
         sendViewBottom = sendView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor)
         sendViewBottom?.isActive = true
-        /*
+        
         sendView.snp.makeConstraints { (make) in
             make.leading.trailing.equalToSuperview()
             make.height.equalTo(50)
             make.bottom.equalTo(self.safeAreaLayoutGuide.snp.bottom)
         }*/
+
+        setupSendButton()
+        setupTextField()
     }
 
     func setupTextField() {
@@ -81,7 +86,8 @@ class ChatView: UIView {
     }
 
     func setupCollectionView() {
-        collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 5, right: 0)
+        //collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 5, right: 0)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
         if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             layout.minimumLineSpacing = 5
         }
@@ -89,11 +95,19 @@ class ChatView: UIView {
         collectionView.register(MessageCell.self, forCellWithReuseIdentifier: "MessageCell")
         addSubview(collectionView)
 
-        collectionView.snp.makeConstraints { (make) in
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
-            make.top.equalTo(self.safeAreaLayoutGuide.snp.top).inset(5)
-            make.bottom.equalTo(sendView.snp.top)
-        }
+        collectionView.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
+        collectionView.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
+        collectionView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 5).isActive = true
+        
+        collectionViewBottom = collectionView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor)
+        collectionViewBottom?.isActive = true
+
+        //collectionView.snp.makeConstraints { (make) in
+        //    make.leading.equalToSuperview()
+        //    make.trailing.equalToSuperview()
+        //    make.top.equalTo(self.safeAreaLayoutGuide.snp.top).inset(5)
+        //    //make.bottom.equalTo(sendView.snp.top)
+        //    make.bottom.equalTo(self.safeAreaLayoutGuide.snp.bottom)
+        //}
     }
 }

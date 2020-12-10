@@ -65,7 +65,7 @@ class ChatController: UIViewController {
         //let keyboardSize = (info.value(forKey: UIResponder.keyboardFrameEndUserInfoKey) as! NSValue).cgRectValue.size
         let keyboardFrame = info.value(forKey: UIResponder.keyboardFrameEndUserInfoKey) as! CGRect
         let keyboardDuration = info.value(forKey: UIResponder.keyboardAnimationDurationUserInfoKey) as! Double
-        chatView.sendViewBottom?.constant = chatView.safeAreaInsets.bottom - keyboardFrame.height
+        chatView.collectionViewBottom?.constant = chatView.safeAreaInsets.bottom - keyboardFrame.height
         UIView.animate(withDuration: keyboardDuration) {
             self.view.layoutIfNeeded()
         }
@@ -74,7 +74,7 @@ class ChatController: UIViewController {
     @objc func handleKeyboardWillHide(notification: Notification) {
         let info = notification.userInfo! as NSDictionary
         let keyboardDuration = info.value(forKey: UIResponder.keyboardAnimationDurationUserInfoKey) as! Double
-        chatView.sendViewBottom?.constant = 0
+        chatView.collectionViewBottom?.constant = 0
         UIView.animate(withDuration: keyboardDuration) {
             self.view.layoutIfNeeded()
         }
@@ -143,7 +143,7 @@ extension ChatController: UICollectionViewDataSource, UICollectionViewDelegateFl
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MessageCell", for: indexPath) as! MessageCell
         let message = messages[indexPath.item]
         if let text = message.text {
-            let bubbleWidth = estimateFrameForText(text: text).width + 25
+            let bubbleWidth = ceil(estimateFrameForText(text: text).width) + 25
             //cell.bubbleWidth = bubbleWidth
             cell.bubbleWidth?.constant = bubbleWidth
             cell.textView.text = text
