@@ -88,6 +88,7 @@ class MessageCell: UICollectionViewCell {
     func setupTextView() {
         textView.backgroundColor = .clear
         textView.font = UIFont.systemFont(ofSize: 16)
+        textView.isUserInteractionEnabled = false
         bubbleView.addSubview(textView)
 
         textView.snp.makeConstraints { (make) in
