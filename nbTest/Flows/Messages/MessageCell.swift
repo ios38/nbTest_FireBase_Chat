@@ -11,6 +11,7 @@ import SnapKit
 class MessageCell: UICollectionViewCell {
     let bubbleView = UIView()
     var userImageView = UIImageView()
+    var messageImageView = UIImageView()
     let textView = UITextView()
     /*
     var bubbleWidth: CGFloat? {
@@ -35,6 +36,7 @@ class MessageCell: UICollectionViewCell {
         setupUserImageView()
         setupBubbleView()
         setupTextView()
+        setupMessageImageView()
     }
 
     required init?(coder: NSCoder) {
@@ -54,7 +56,6 @@ class MessageCell: UICollectionViewCell {
             make.leading.equalToSuperview().inset(5)
             make.bottom.equalToSuperview()
         }
-
     }
 
     func setupBubbleView() {
@@ -96,4 +97,17 @@ class MessageCell: UICollectionViewCell {
             make.leading.trailing.equalToSuperview().inset(5)
         }
     }
+
+    func setupMessageImageView() {
+        messageImageView.clipsToBounds = true
+        messageImageView.layer.cornerRadius = 10
+        messageImageView.contentMode = .scaleAspectFill
+        messageImageView.isHidden = true
+        bubbleView.addSubview(messageImageView)
+
+        messageImageView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+    }
+
 }

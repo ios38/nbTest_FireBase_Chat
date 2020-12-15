@@ -22,7 +22,6 @@ class ChatController: UIViewController {
     var bubbleWidth: CGFloat = 300
     
     override func loadView() {
-        super.loadView()
         self.view = chatView
     }
 
@@ -154,6 +153,51 @@ class ChatController: UIViewController {
             recipientRef.updateChildValues([messageId: 0])
         }
     }
+    
+    private func uploadImage(_ image: UIImage) {
+        let imageName = UUID().uuidString
+        let storageRef = Storage.storage().reference().child("message_images").child(imageName)
+        guard let uploadData = image.jpegData(compressionQuality: 0.1) else { return }
+        storageRef.putData(uploadData, metadata: nil) { (metadata, error) in
+            if let error = error {
+                print(error)
+            }
+            storageRef.downloadURL { [weak self] (url, error) in
+                if let error = error {
+                    print(error)
+                }
+                guard let userImageUrl = url?.absoluteString else { return }
+                self?.sendMessageWithImage(userImageUrl)
+            }
+        }
+    }
+
+    private func sendMessageWithImage(_ imageUrl: String) {
+        let ref = Database.database().reference().child("messages")
+        let childRef = ref.childByAutoId()
+        guard let fromId = Auth.auth().currentUser?.uid, let toId = user?.id else { return }
+        let date = Date().timeIntervalSince1970
+        let values = ["imageUrl": imageUrl, "toId": toId, "fromId": fromId, "date": date] as [String: Any]
+        //childRef.updateChildValues(values) { (error, ref) in
+        //    if let error = error {
+        //        print(error)
+        //        return
+        //    }
+        //}
+        childRef.updateChildValues(values) { (error, ref) in
+            if let error = error {
+                print(error)
+                return
+            }
+
+            let userMessageRef = Database.database().reference().child("user_messages").child(fromId).child(toId)
+            guard let messageId = childRef.key else { return }
+            userMessageRef.updateChildValues([messageId: 0])
+            
+            let recipientRef = Database.database().reference().child("user_messages").child(toId).child(fromId)
+            recipientRef.updateChildValues([messageId: 0])
+        }
+    }
 }
 
 extension ChatController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
@@ -170,13 +214,13 @@ extension ChatController: UICollectionViewDataSource, UICollectionViewDelegateFl
             //cell.bubbleWidth = bubbleWidth
             cell.bubbleWidth?.constant = bubbleWidth
             cell.textView.text = text
-            setupCell(cell, message: message)
         }
+        setupCell(cell, message: message)
         return cell
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        var height: CGFloat = 100
+        var height: CGFloat = 150
         
         if let text = messages[indexPath.item].text {
             height = estimateFrameForText(text: text).height + 20
@@ -193,6 +237,11 @@ extension ChatController: UICollectionViewDataSource, UICollectionViewDelegateFl
     func setupCell(_ cell: MessageCell, message: Message) {
         if let profileImageUrl = user?.profileImageUrl, let url = URL(string: profileImageUrl) {
             cell.userImageView.kf.setImage(with: url)
+        }
+
+        if let messageImageUrl = message.imageUrl, let url = URL(string: messageImageUrl) {
+            cell.messageImageView.isHidden = false
+            cell.messageImageView.kf.setImage(with: url)
         }
 
         if message.fromId == Auth.auth().currentUser?.uid {
@@ -224,8 +273,7 @@ extension ChatController: UINavigationControllerDelegate, UIImagePickerControlle
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let image  = extractImage(info: info) {
-            print("image selected")
-            //loginView.userImageView.image = image
+            uploadImage(image)
         }
         
         picker.dismiss(animated: true)
@@ -240,4 +288,5 @@ extension ChatController: UINavigationControllerDelegate, UIImagePickerControlle
             return nil
         }
     }
+    
 }

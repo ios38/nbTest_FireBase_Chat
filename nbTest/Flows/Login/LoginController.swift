@@ -18,7 +18,6 @@ class LoginController: UIViewController {
     private var authListener: AuthStateDidChangeListenerHandle?
 
     override func loadView() {
-        super.loadView()
         self.view = loginView
     }
 
