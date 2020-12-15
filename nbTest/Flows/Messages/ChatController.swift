@@ -35,6 +35,7 @@ class ChatController: UIViewController {
         chatView.collectionView.contentInset = UIEdgeInsets(top: 5, left: 0, bottom: 0, right: 0)
 
         chatView.textField.delegate = self
+        chatView.sendImage.addTarget(self, action: #selector(sendImageAction), for: .touchUpInside)
         chatView.sendButton.addTarget(self, action: #selector(sendButtonAction), for: .touchUpInside)
         
         setupKeyboardObservers()
@@ -113,6 +114,16 @@ class ChatController: UIViewController {
                 }
             }
         }
+    }
+
+    @objc func sendImageAction() {
+        guard UIImagePickerController.isSourceTypeAvailable(.photoLibrary) else { return }
+        let picker = UIImagePickerController()
+        picker.delegate = self
+        picker.sourceType = .photoLibrary
+        picker.allowsEditing = true
+        
+        present(picker, animated: true)
     }
 
     @objc func sendButtonAction() {
@@ -203,5 +214,30 @@ extension ChatController: UITextFieldDelegate {
         sendButtonAction()
         chatView.textField.resignFirstResponder()
         return true
+    }
+}
+
+extension ChatController: UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let image  = extractImage(info: info) {
+            print("image selected")
+            //loginView.userImageView.image = image
+        }
+        
+        picker.dismiss(animated: true)
+    }
+    
+    private func extractImage(info: [UIImagePickerController.InfoKey : Any]) -> UIImage? {
+        if let image = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
+            return image
+        } else if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            return image
+        } else {
+            return nil
+        }
     }
 }
