@@ -65,6 +65,8 @@ class LoginView: UIView {
     private func setupLoginTextField() {
         loginTextField.borderStyle = .roundedRect
         loginTextField.placeholder = "email"
+        loginTextField.keyboardType = .emailAddress
+        loginTextField.autocapitalizationType = .none
         loginTextField.accessibilityIdentifier = "loginTextField"
         view.addSubview(loginTextField)
 

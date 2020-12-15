@@ -27,6 +27,8 @@ class LoginController: UIViewController {
         //self.navigationItem.title = "Вход"
         setUpBindings()
         setupUserImagePicker()
+        
+        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(hideKeyboard)))
     }
 
     //override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -132,6 +134,12 @@ class LoginController: UIViewController {
         present(picker, animated: true)
     }
 
+    @objc func hideKeyboard() {
+        print("hideKeyboardGesture")
+        view.endEditing(true)
+        //loginView.endEditing(true)
+        //loginView.loginTextField.resignFirstResponder()
+    }
 
 }
 

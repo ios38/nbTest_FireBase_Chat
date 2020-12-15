@@ -12,6 +12,7 @@ class ChatView: UIView {
     var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     var sendView = UIView()
     
+    var sendImage = UIButton(type: .system)
     var textField = UITextField()
     var sendButton = UIButton(type: .system)
 
@@ -75,26 +76,42 @@ class ChatView: UIView {
         //// this is the important part :
         //textField.bottomAnchor.constraint(equalTo: sendView.layoutMarginsGuide.bottomAnchor, constant: -8).isActive = true
 
+        sendImage.setImage(UIImage(systemName: "camera"), for: .normal)
+        sendImage.tintColor = .systemBlue
+        sendView.addSubview(sendImage)
+
         textField.borderStyle = .roundedRect
         textField.placeholder = "Сообщение..."
         textField.backgroundColor = .secondarySystemBackground
+        textField.setContentHuggingPriority(UILayoutPriority(rawValue: 999), for: .horizontal)
         sendView.addSubview(textField)
 
-        sendButton.setTitle("Отправить", for: .normal)
-        sendButton.titleLabel?.font = .systemFont(ofSize: 18)
-        sendButton.setContentHuggingPriority(UILayoutPriority(rawValue: 999), for: .horizontal)
+        //sendButton.setTitle("Отправить", for: .normal)
+        //sendButton.titleLabel?.font = .systemFont(ofSize: 18)
+        sendButton.setImage(UIImage(systemName: "paperplane.fill"), for: .normal)
+        //sendButton.imageView?.clipsToBounds = true
+        //sendButton.imageView?.contentMode = .scaleAspectFit
+        sendButton.tintColor = .systemBlue
         sendView.addSubview(sendButton)
         
+        sendImage.snp.makeConstraints { make in
+            make.width.height.equalTo(40)
+            make.leading.equalToSuperview().offset(5)
+            make.centerY.equalTo(textField.snp.centerY)
+        }
+
         textField.snp.makeConstraints { make in
-            make.top.leading.equalToSuperview().offset(10)
-            //make.centerY.equalToSuperview()
-            make.trailing.equalTo(sendButton.snp.leading).offset(10)
+            make.top.equalToSuperview().offset(10)
+            //make.leading.equalToSuperview().offset(10)
+            make.leading.equalTo(sendImage.snp.trailing).offset(5)
+            make.trailing.equalTo(sendButton.snp.leading).offset(-5)
             make.bottom.equalTo(sendView.layoutMarginsGuide.snp.bottom).inset(10)
         }
 
         sendButton.snp.makeConstraints { (make) in
-            make.width.equalTo(130)
-            make.trailing.equalToSuperview()
+            //make.width.equalTo(130)
+            make.width.height.equalTo(40)
+            make.trailing.equalToSuperview().inset(5)
             make.centerY.equalTo(textField.snp.centerY)
         }
 
