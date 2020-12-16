@@ -15,6 +15,8 @@ class Message: NSObject {
     var date: Double?
     var toId: String?
     var imageUrl: String?
+    var imageWidht: Float?
+    var imageHeight: Float?
 
     init(dictionary: [String: AnyObject]) {
         self.fromId = dictionary["fromId"] as? String
@@ -22,6 +24,8 @@ class Message: NSObject {
         self.date = dictionary["date"] as? Double
         self.toId = dictionary["toId"] as? String
         self.imageUrl = dictionary["imageUrl"] as? String
+        self.imageWidht = dictionary["imageWidht"] as? Float
+        self.imageHeight = dictionary["imageHeight"] as? Float
     }
 
     func chatPartnerId() -> String? { //FiXME: to var?

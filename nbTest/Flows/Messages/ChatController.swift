@@ -167,17 +167,19 @@ class ChatController: UIViewController {
                     print(error)
                 }
                 guard let userImageUrl = url?.absoluteString else { return }
-                self?.sendMessageWithImage(userImageUrl)
+                self?.sendMessageWithImage(userImageUrl, image: image)
             }
         }
     }
 
-    private func sendMessageWithImage(_ imageUrl: String) {
+    private func sendMessageWithImage(_ imageUrl: String, image: UIImage) {
         let ref = Database.database().reference().child("messages")
         let childRef = ref.childByAutoId()
         guard let fromId = Auth.auth().currentUser?.uid, let toId = user?.id else { return }
         let date = Date().timeIntervalSince1970
-        let values = ["imageUrl": imageUrl, "toId": toId, "fromId": fromId, "date": date] as [String: Any]
+        let imageWidht = image.size.width
+        let imageHeght = image.size.height
+        let values = ["toId": toId, "fromId": fromId, "date": date, "imageUrl": imageUrl, "imageWidht": imageWidht, "imageHeight": imageHeght] as [String: Any]
         //childRef.updateChildValues(values) { (error, ref) in
         //    if let error = error {
         //        print(error)
@@ -209,22 +211,34 @@ extension ChatController: UICollectionViewDataSource, UICollectionViewDelegateFl
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MessageCell", for: indexPath) as! MessageCell
         let message = messages[indexPath.item]
+        
         if let text = message.text {
             let bubbleWidth = ceil(estimateFrameForText(text: text).width) + 25
             //cell.bubbleWidth = bubbleWidth
             cell.bubbleWidth?.constant = bubbleWidth
             cell.textView.text = text
         }
+        
+        if let imageWidht = messages[indexPath.item].imageWidht, let imageHeight = messages[indexPath.item].imageHeight {
+            cell.bubbleWidth?.constant = 200
+        }
+
         setupCell(cell, message: message)
         return cell
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        var height: CGFloat = 150
+        var height: CGFloat = 200
         
         if let text = messages[indexPath.item].text {
+            //width = ceil(estimateFrameForText(text: text).width) + 25
             height = estimateFrameForText(text: text).height + 20
         }
+        
+        if let imageWidht = messages[indexPath.item].imageWidht, let imageHeight = messages[indexPath.item].imageHeight {
+            height = view.frame.width * CGFloat(imageHeight / imageWidht)
+        }
+        
         return CGSize(width: view.frame.width, height: height)
     }
 
