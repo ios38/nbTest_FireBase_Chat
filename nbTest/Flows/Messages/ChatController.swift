@@ -178,14 +178,8 @@ class ChatController: UIViewController {
         guard let fromId = Auth.auth().currentUser?.uid, let toId = user?.id else { return }
         let date = Date().timeIntervalSince1970
         let imageWidht = image.size.width
-        let imageHeght = image.size.height
-        let values = ["toId": toId, "fromId": fromId, "date": date, "imageUrl": imageUrl, "imageWidht": imageWidht, "imageHeight": imageHeght] as [String: Any]
-        //childRef.updateChildValues(values) { (error, ref) in
-        //    if let error = error {
-        //        print(error)
-        //        return
-        //    }
-        //}
+        let imageHeight = image.size.height
+        let values = ["toId": toId, "fromId": fromId, "date": date, "imageUrl": imageUrl, "imageWidht": imageWidht, "imageHeight": imageHeight] as [String: Any]
         childRef.updateChildValues(values) { (error, ref) in
             if let error = error {
                 print(error)
@@ -236,7 +230,8 @@ extension ChatController: UICollectionViewDataSource, UICollectionViewDelegateFl
         }
         
         if let imageWidht = messages[indexPath.item].imageWidht, let imageHeight = messages[indexPath.item].imageHeight {
-            height = view.frame.width * CGFloat(imageHeight / imageWidht)
+            height = 200 * CGFloat(imageHeight / imageWidht)
+            print(height)
         }
         
         return CGSize(width: view.frame.width, height: height)
