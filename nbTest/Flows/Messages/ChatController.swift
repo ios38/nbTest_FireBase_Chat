@@ -80,6 +80,8 @@ class ChatController: UIViewController {
         //UIView.animate(withDuration: keyboardDuration) {
         //    self.view.layoutIfNeeded()
         //}
+        let indexPath = IndexPath(item: self.messages.count - 1, section: 0)
+        self.chatView.collectionView.scrollToItem(at: indexPath, at: .bottom, animated: true)
     }
 
     @objc func handleKeyboardWillHide(notification: Notification) {
@@ -105,12 +107,13 @@ class ChatController: UIViewController {
             let messageId = snapshot.key
             let messageRef = Database.database().reference().child("messages").child(messageId)
             messageRef.observeSingleEvent(of: .value) { [weak self] (snapshot) in
-                guard let dictionary = snapshot.value as? [String: AnyObject] else { return }
+                guard let dictionary = snapshot.value as? [String: AnyObject], let self = self else { return }
                 let message = Message(dictionary: dictionary)
-                self?.messages.append(message)
+                self.messages.append(message)
                 DispatchQueue.main.async {
-                    self?.chatView.collectionView.reloadData()
-                }
+                    self.chatView.collectionView.reloadData()
+                    let indexPath = IndexPath(item: self.messages.count - 1, section: 0)
+                    self.chatView.collectionView.scrollToItem(at: indexPath, at: .bottom, animated: true)                }
             }
         }
     }
