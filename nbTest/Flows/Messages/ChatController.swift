@@ -126,6 +126,7 @@ class ChatController: UIViewController {
     }
 
     @objc func sendButtonAction() {
+        /*
         let ref = Database.database().reference().child("messages")
         let childRef = ref.childByAutoId()
         guard let text = chatView.textField.text,
@@ -135,6 +136,14 @@ class ChatController: UIViewController {
         else { return }
         let date = Date().timeIntervalSince1970
         let values = ["text": text, "toId": toId, "fromId": fromId, "date": date] as [String: Any]
+         */
+        guard let text = chatView.textField.text, !text.isEmpty else { return }
+        let properties = ["text": text]
+        sendMessage(with: properties)
+        self.chatView.textField.text = nil
+        self.chatView.textField.resignFirstResponder()
+
+        /*
         childRef.updateChildValues(values) { [weak self] (error, ref) in
             if let error = error {
                 print(error)
@@ -151,9 +160,69 @@ class ChatController: UIViewController {
             
             let recipientRef = Database.database().reference().child("user_messages").child(toId).child(fromId)
             recipientRef.updateChildValues([messageId: 0])
-        }
+        }*/
     }
-    
+
+    private func sendMessage(with properties: [String: Any]) {
+        let ref = Database.database().reference().child("messages")
+        let childRef = ref.childByAutoId()
+        guard let fromId = Auth.auth().currentUser?.uid, let toId = user?.id else { return }
+        let date = Date().timeIntervalSince1970
+        
+        var values = ["toId": toId, "fromId": fromId, "date": date] as [String: Any]
+        
+        //properties.forEach { (key: String, value: Any) in
+        //    values[key] = value
+        //}
+        properties.forEach { values[$0] = $1 }
+        
+        childRef.updateChildValues(values) { (error, ref) in
+            if let error = error {
+                print(error)
+                return
+            }
+
+            let userMessageRef = Database.database().reference().child("user_messages").child(fromId).child(toId)
+            guard let messageId = childRef.key else { return }
+            userMessageRef.updateChildValues([messageId: 0])
+            
+            let recipientRef = Database.database().reference().child("user_messages").child(toId).child(fromId)
+            recipientRef.updateChildValues([messageId: 0])
+        }
+
+    }
+
+    private func sendMessageWithImage(_ imageUrl: String, image: UIImage) {
+        /*
+        let ref = Database.database().reference().child("messages")
+        let childRef = ref.childByAutoId()
+        guard let fromId = Auth.auth().currentUser?.uid, let toId = user?.id else { return }
+        let date = Date().timeIntervalSince1970
+        
+        let values = ["toId": toId, "fromId": fromId, "date": date, "imageUrl": imageUrl, "imageWidht": imageWidht, "imageHeight": imageHeight] as [String: Any]
+        */
+        let imageWidht = image.size.width
+        let imageHeight = image.size.height
+
+        let properties = ["imageUrl": imageUrl, "imageWidht": imageWidht, "imageHeight": imageHeight] as [String: Any]
+
+        sendMessage(with: properties)
+        /*
+        childRef.updateChildValues(values) { (error, ref) in
+            if let error = error {
+                print(error)
+                return
+            }
+
+            let userMessageRef = Database.database().reference().child("user_messages").child(fromId).child(toId)
+            guard let messageId = childRef.key else { return }
+            userMessageRef.updateChildValues([messageId: 0])
+            
+            let recipientRef = Database.database().reference().child("user_messages").child(toId).child(fromId)
+            recipientRef.updateChildValues([messageId: 0])
+        }*/
+    }
+
     private func uploadImage(_ image: UIImage) {
         let imageName = UUID().uuidString
         let storageRef = Storage.storage().reference().child("message_images").child(imageName)
@@ -172,28 +241,6 @@ class ChatController: UIViewController {
         }
     }
 
-    private func sendMessageWithImage(_ imageUrl: String, image: UIImage) {
-        let ref = Database.database().reference().child("messages")
-        let childRef = ref.childByAutoId()
-        guard let fromId = Auth.auth().currentUser?.uid, let toId = user?.id else { return }
-        let date = Date().timeIntervalSince1970
-        let imageWidht = image.size.width
-        let imageHeight = image.size.height
-        let values = ["toId": toId, "fromId": fromId, "date": date, "imageUrl": imageUrl, "imageWidht": imageWidht, "imageHeight": imageHeight] as [String: Any]
-        childRef.updateChildValues(values) { (error, ref) in
-            if let error = error {
-                print(error)
-                return
-            }
-
-            let userMessageRef = Database.database().reference().child("user_messages").child(fromId).child(toId)
-            guard let messageId = childRef.key else { return }
-            userMessageRef.updateChildValues([messageId: 0])
-            
-            let recipientRef = Database.database().reference().child("user_messages").child(toId).child(fromId)
-            recipientRef.updateChildValues([messageId: 0])
-        }
-    }
 }
 
 extension ChatController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
@@ -231,7 +278,7 @@ extension ChatController: UICollectionViewDataSource, UICollectionViewDelegateFl
         
         if let imageWidht = messages[indexPath.item].imageWidht, let imageHeight = messages[indexPath.item].imageHeight {
             height = 200 * CGFloat(imageHeight / imageWidht)
-            print(height)
+            //print(height)
         }
         
         return CGSize(width: view.frame.width, height: height)
