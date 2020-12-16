@@ -8,10 +8,14 @@
 import UIKit
 import SnapKit
 
+protocol ImageDetailing {
+    func imageDetaiView (_ imageView: UIImageView)
+}
+
 class MessageCell: UICollectionViewCell {
     let bubbleView = UIView()
-    var userImageView = UIImageView()
-    var messageImageView = UIImageView()
+    let userImageView = UIImageView()
+    let messageImageView = UIImageView()
     let textView = UITextView()
     /*
     var bubbleWidth: CGFloat? {
@@ -27,6 +31,8 @@ class MessageCell: UICollectionViewCell {
     var bubbleWidth: NSLayoutConstraint?
     var bubbleLeading: NSLayoutConstraint?
     var bubbleTrailing: NSLayoutConstraint?
+    
+    var delegate: ImageDetailing?
 
     static let userMessageColor = UIColor.systemBlue.withAlphaComponent(0.7)
     
@@ -103,6 +109,8 @@ class MessageCell: UICollectionViewCell {
         messageImageView.layer.cornerRadius = 10
         messageImageView.contentMode = .scaleAspectFill
         messageImageView.isHidden = true
+        messageImageView.isUserInteractionEnabled = true
+        messageImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(imageTapAction(_:))))
         bubbleView.addSubview(messageImageView)
 
         messageImageView.snp.makeConstraints { make in
@@ -110,4 +118,9 @@ class MessageCell: UICollectionViewCell {
         }
     }
 
+    @objc func imageTapAction(_ recognizer: UITapGestureRecognizer) {
+        if let imageView = recognizer.view as? UIImageView {
+            delegate?.imageDetaiView(imageView)
+        }
+    }
 }

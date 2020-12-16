@@ -20,7 +20,12 @@ class ChatController: UIViewController {
     }
 
     var bubbleWidth: CGFloat = 300
+
+    var startingFrame: CGRect?
+    var backgroindView: UIView?
+    var startingImageView: UIImageView?
     
+
     override func loadView() {
         self.view = chatView
     }
@@ -202,6 +207,8 @@ extension ChatController: UICollectionViewDataSource, UICollectionViewDelegateFl
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MessageCell", for: indexPath) as! MessageCell
+        cell.delegate = self
+
         let message = messages[indexPath.item]
         
         if let text = message.text {
@@ -242,6 +249,7 @@ extension ChatController: UICollectionViewDataSource, UICollectionViewDelegateFl
     }
     
     func setupCell(_ cell: MessageCell, message: Message) {
+        
         if let profileImageUrl = user?.profileImageUrl, let url = URL(string: profileImageUrl) {
             cell.userImageView.kf.setImage(with: url)
         }
@@ -249,6 +257,8 @@ extension ChatController: UICollectionViewDataSource, UICollectionViewDelegateFl
         if let messageImageUrl = message.imageUrl, let url = URL(string: messageImageUrl) {
             cell.messageImageView.isHidden = false
             cell.messageImageView.kf.setImage(with: url)
+            cell.textView.isHidden = true
+            cell.backgroundColor = .clear
         }
 
         if message.fromId == Auth.auth().currentUser?.uid {
@@ -296,4 +306,52 @@ extension ChatController: UINavigationControllerDelegate, UIImagePickerControlle
         }
     }
     
+}
+
+extension ChatController: ImageDetailing {
+    func imageDetaiView(_ imageView: UIImageView) {
+        print("imageDetaiView")
+        startingImageView = imageView
+        startingImageView?.isHidden = true
+        
+        self.startingFrame = imageView.superview?.convert(imageView.frame, to: nil)
+        let detailedImageView = UIImageView(frame: startingFrame!)
+        detailedImageView.image = imageView.image
+        detailedImageView.contentMode = .scaleAspectFit
+        detailedImageView.isUserInteractionEnabled = true
+        detailedImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(zoomOutAction(_ :))))
+        
+        if let keyWindow = UIApplication.shared.keyWindow {
+            backgroindView = UIView(frame: keyWindow.frame)
+            backgroindView?.backgroundColor = .black
+            backgroindView?.alpha = 0
+            keyWindow.addSubview(backgroindView!)
+            keyWindow.addSubview(detailedImageView)
+            
+            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+                self.backgroindView?.alpha = 1
+                self.inputAccessoryView?.alpha = 0
+                let height = self.startingFrame!.height / self.startingFrame!.width * keyWindow.frame.width
+                detailedImageView.frame = CGRect(x: 0, y: 0, width: keyWindow.frame.width, height: height)
+                detailedImageView.center = keyWindow.center
+            }, completion: nil)
+        }
+    }
+    
+    @objc func zoomOutAction(_ recognizer: UITapGestureRecognizer) {
+        if let zoomOutImageView = recognizer.view as? UIImageView {
+            zoomOutImageView.layer.cornerRadius = 10
+            zoomOutImageView.clipsToBounds = true
+
+            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut) {
+                zoomOutImageView.frame = self.startingFrame!
+                self.backgroindView?.alpha = 0
+                self.inputAccessoryView?.alpha = 1
+            } completion: { [weak self] (complete) in
+                zoomOutImageView.removeFromSuperview()
+                self?.startingImageView?.isHidden = false
+            }
+
+        }
+    }
 }
